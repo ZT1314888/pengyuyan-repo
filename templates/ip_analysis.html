@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+
+{% block extra_style %}
+<style>
+    .stats-info {
+        grid-template-columns: repeat(2, 1fr);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="page-content">
+    {% include 'components/page_header.html' with icon='fa-map-marker' title='IP地址分布分析' %}
+
+    <div class="stats-info">
+        {% include 'components/info_card.html' with icon='fa-comments' label='总评论数' value=total_comments %}
+        {% include 'components/info_card.html' with icon='fa-map-marker' label='地域数量' value=chart_data|length %}
+    </div>
+
+    {% include 'components/chart_container.html' with chart_id='ipChart' %}
+</div>
+{% endblock %}
+
+{% block extra_script %}
+{{ chart_data|json_script:"chart-data" }}
+<script>
+    var chartDom = document.getElementById('ipChart');
+    var myChart = echarts.init(chartDom);
+    var chartData = JSON.parse(document.getElementById('chart-data').textContent);
+    
+    var option = {
+        title: {
+            text: 'IP地址分布TOP20',
+            left: 'center',
+            top: 20,
+            textStyle: {
+                fontSize: 18,
+                fontWeight: 600
+            }
+        },
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'shadow'
+            },
+            formatter: '{b}<br/>评论数: {c}'
+        },
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+        },
+        xAxis: {
+            type: 'value',
+            name: '评论数量'
+        },
+        yAxis: {
+            type: 'category',
+            data: chartData.map(item => item.location),
+            axisLabel: {
+                interval: 0,
+                fontSize: 11
+            }
+        },
+        series: [
+            {
+                name: '评论数',
+                type: 'bar',
+                data: chartData.map(item => item.count),
+                itemStyle: {
+                    color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
+                        { offset: 0, color: '#5470c6' },
+                        { offset: 1, color: '#91cc75' }
+                    ]),
+                    borderRadius: [0, 8, 8, 0]
+                },
+                label: {
+                    show: true,
+                    position: 'right',
+                    formatter: '{c}'
+                }
+            }
+        ]
+    };
+    
+    myChart.setOption(option);
+    
+    window.addEventListener('resize', function() {
+        myChart.resize();
+    });
+</script>
+{% endblock %}

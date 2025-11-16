@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block extra_style %}
+<link rel="stylesheet" href="/static/css/index.css">
+{% endblock %}
+
+{% block content %}
+<div class="page-content">
+    <!-- 页面标题 -->
+    <div class="page-header">
+        <i class="fa fa-home"></i>
+        <h1>抖音数据分析平台</h1>
+    </div>
+
+    <!-- 统计卡片组件 -->
+    {% include 'components/stats_cards.html' %}
+
+    <!-- 视频排行图表组件 -->
+    {% include 'components/video_rank_chart.html' %}
+</div>
+{% endblock %}
+
+{% block extra_script %}
+{{ top_videos|json_script:"video-data" }}
+<script src="/static/js/charts/video_rank_chart.js"></script>
+<script>
+    // 初始化图表
+    document.addEventListener('DOMContentLoaded', function() {
+        var videoData = JSON.parse(document.getElementById('video-data').textContent);
+        initVideoRankChart(videoData);
+    });
+</script>
+{% endblock %}

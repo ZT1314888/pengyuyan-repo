@@ -1,0 +1,219 @@
+{% extends 'base.html' %}
+
+{% block extra_style %}
+<style>
+    .page-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 24px;
+    }
+
+    .page-header i {
+        font-size: 28px;
+        color: #5470c6;
+        margin-right: 12px;
+    }
+
+    .page-header h1 {
+        font-size: 24px;
+        font-weight: 600;
+        color: #333;
+        margin: 0;
+    }
+
+    .prediction-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 24px;
+        margin-bottom: 24px;
+    }
+
+    .form-container {
+        background: #fff;
+        border-radius: 12px;
+        padding: 24px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    .form-container h3 {
+        margin: 0 0 20px 0;
+        font-size: 18px;
+        color: #333;
+        display: flex;
+        align-items: center;
+    }
+
+    .form-container h3 i {
+        margin-right: 8px;
+        color: #5470c6;
+    }
+
+    .form-group {
+        margin-bottom: 16px;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 500;
+        color: #666;
+    }
+
+    .form-group input {
+        width: 100%;
+        height: 45px;
+        padding: 0 15px;
+        border: 2px solid #e3e6f0;
+        border-radius: 8px;
+        font-size: 14px;
+        transition: all 0.3s;
+    }
+
+    .form-group input:focus {
+        outline: none;
+        border-color: #5470c6;
+    }
+
+    .btn-predict {
+        width: 100%;
+        height: 50px;
+        background: linear-gradient(135deg, #5470c6, #91cc75);
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+
+    .btn-predict:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(84, 112, 198, 0.4);
+    }
+
+    .result-container {
+        background: #fff;
+        border-radius: 12px;
+        padding: 24px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    .result-container h3 {
+        margin: 0 0 20px 0;
+        font-size: 18px;
+        color: #333;
+        display: flex;
+        align-items: center;
+    }
+
+    .result-container h3 i {
+        margin-right: 8px;
+        color: #5470c6;
+    }
+
+    .result-display {
+        text-align: center;
+        padding: 40px 20px;
+    }
+
+    .result-display .icon {
+        font-size: 64px;
+        color: #5470c6;
+        margin-bottom: 20px;
+    }
+
+    .result-display .value {
+        font-size: 48px;
+        font-weight: 700;
+        color: #5470c6;
+        margin-bottom: 10px;
+    }
+
+    .result-display .label {
+        font-size: 16px;
+        color: #666;
+    }
+
+    .empty-result {
+        text-align: center;
+        padding: 60px 20px;
+        color: #999;
+    }
+
+    .empty-result i {
+        font-size: 64px;
+        color: #ddd;
+        margin-bottom: 20px;
+    }
+
+    @media (max-width: 992px) {
+        .prediction-container {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="page-content">
+    <div class="page-header">
+        <i class="fa fa-line-chart"></i>
+        <h1>点赞量趋势预测</h1>
+    </div>
+
+    <div class="prediction-container">
+        <!-- 输入表单 -->
+        <div class="form-container">
+            <h3><i class="fa fa-edit"></i> 输入视频参数</h3>
+            <form method="POST">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label>视频时长（秒）</label>
+                    <input type="number" name="duration" value="60" required>
+                </div>
+                <div class="form-group">
+                    <label>收藏数量</label>
+                    <input type="number" name="collect" value="1000" required>
+                </div>
+                <div class="form-group">
+                    <label>评论数量</label>
+                    <input type="number" name="comment" value="500" required>
+                </div>
+                <div class="form-group">
+                    <label>分享数量</label>
+                    <input type="number" name="share" value="300" required>
+                </div>
+                <div class="form-group">
+                    <label>粉丝数量</label>
+                    <input type="number" name="fans" value="10000" required>
+                </div>
+                <div class="form-group">
+                    <label>发布时间（小时，0-23）</label>
+                    <input type="number" name="hour" value="19" min="0" max="23" required>
+                </div>
+                <button type="submit" class="btn-predict">
+                    <i class="fa fa-magic"></i> 开始预测
+                </button>
+            </form>
+        </div>
+
+        <!-- 预测结果 -->
+        <div class="result-container">
+            <h3><i class="fa fa-bar-chart"></i> 预测结果</h3>
+            {% if prediction_result %}
+                <div class="result-display">
+                    <div class="icon"><i class="fa fa-thumbs-up"></i></div>
+                    <div class="value">{{ prediction_result|floatformat:0 }}</div>
+                    <div class="label">预测点赞数</div>
+                </div>
+            {% else %}
+                <div class="empty-result">
+                    <i class="fa fa-lightbulb-o"></i>
+                    <p>请输入视频参数并点击预测按钮</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
