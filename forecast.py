@@ -1,8 +1,14 @@
 import joblib
 import pandas as pd
+import os
 
-model = joblib.load('build_model/like_model.joblib')
-scaler = joblib.load('build_model/likescaler.joblib')
+# 获取当前文件所在目录的绝对路径
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+MODEL_PATH = os.path.join(BASE_DIR, 'build_model', 'like_model.joblib')
+SCALER_PATH = os.path.join(BASE_DIR, 'build_model', 'likescaler.joblib')
+
+model = joblib.load(MODEL_PATH)
+scaler = joblib.load(SCALER_PATH)
 
 def predict_likes(input_data):
     features =[
