@@ -1,2 +1,114 @@
-# pengyuyan-repo
-开源项目库
+````
+# 抖音数据分析系统
+
+基于Django的抖音视频数据分析平台，提供多维度数据分析、可视化展示和AI智能建议功能。
+
+## ✨ 功能特性
+
+- 📊 **数据总览** - 实时展示关键指标统计
+- 🎬 **视频排行榜** - 多维度视频数据排序查询
+- 🤖 **AI分析建议** - 基于数据的智能分析建议
+- 📈 **数据可视化** - 粉丝分析、评论分享、IP分析等
+- ☁️ **词云图** - 视频标题和评论内容词云展示
+- 📉 **趋势预测** - 点赞量趋势预测分析
+- 🔐 **用户认证** - 完整的登录注册系统
+
+## 🛠️ 技术栈
+
+- **后端框架：** Django 4.2
+- **数据库：** MySQL
+- **前端框架：** Bootstrap + ECharts
+- **管理后台：** SimpleUI
+- **数据分析：** Pandas, NumPy, Scikit-learn
+- **自然语言处理：** jieba分词
+
+## 📦 快速开始
+
+### 1. 环境要求
+
+- Python 3.8+
+- MySQL 5.7+
+- pip
+
+### 2. 导入数据（可选）
+
+**方式1：使用初始化脚本（推荐）**
+```bash
+python init_database.py
+```
+这会自动创建管理员账号和测试数据
+
+**方式2：导入SQL备份**
+如果有SQL备份文件：
+```bash
+python import_sql.py
+```
+
+访问地址：
+- 前台系统：http://yourhost/
+- 管理后台：http://yourhost/admin/
+
+**默认账号（使用初始化脚本后）：**
+- 管理员：admin / admin123
+- 测试用户：test / test123
+
+## 📁 项目结构
+
+```
+douyin-analysis/
+├── dy_project/          # Django项目配置
+│   ├── settings.py      # 项目设置
+│   └── urls.py          # 主路由配置
+├── video/               # 核心应用模块
+│   ├── models.py        # 数据模型
+│   ├── views.py         # 视图函数
+│   └── urls.py          # 应用路由
+├── templates/           # 模板文件
+│   ├── base.html        # 基础模板
+│   ├── index.html       # 首页
+│   └── components/      # 组件模板
+├── static/              # 静态资源
+│   ├── css/             # 样式文件
+│   ├── js/              # JavaScript文件
+│   └── img/             # 图片资源
+├── data/                # 数据文件和处理脚本
+├── build_model/         # 机器学习模型
+├── config.py            # 配置文件（需自行创建）
+├── manage.py            # Django管理脚本
+└── requirements.txt     # 依赖包列表
+```
+
+## 📖 使用说明
+
+### 登录系统
+1. 访问首页会自动跳转到登录页面
+2. 使用注册的账号登录或创建新账号
+
+### 数据分析功能
+- **首页：** 查看整体数据概览和统计图表
+- **视频排行榜：** 按点赞、评论、收藏、分享等维度查看视频排名
+- **AI分析建议：** 获取基于数据的智能分析建议
+- **数据可视化：** 查看粉丝分析、评论分享、IP分布等图表
+- **词云图：** 查看视频标题和评论的词云分析
+- **趋势预测：** 查看点赞量趋势预测
+
+## 📄 许可证
+
+本项目采用 MIT 许可证 - 详见 [LICENSE](LICENSE) 文件
+
+## 🤝 贡献
+
+欢迎提交 Issue 和 Pull Request！
+
+## 📧 联系方式
+
+- 项目地址：https://github.com/your-username/douyin-analysis
+- 问题反馈：https://github.com/your-username/douyin-analysis/issues
+
+---
+
+## 支持作者
+
+⭐ 如果这个项目对你有帮助，请给个Star支持一下！
+
+````
