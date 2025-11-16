@@ -1,4 +1,3 @@
-````
 # 抖音数据分析系统
 
 基于Django的抖音视频数据分析平台，提供多维度数据分析、可视化展示和AI智能建议功能。
@@ -32,29 +31,35 @@
 
 ### 2. 导入数据（可选）
 
-**方式1：使用初始化脚本（推荐）**
-```bash
+#### 方式1：使用初始化脚本（推荐）
+
+```text
 python init_database.py
 ```
+
 这会自动创建管理员账号和测试数据
 
-**方式2：导入SQL备份**
+#### 方式2：导入SQL备份
+
 如果有SQL备份文件：
-```bash
+
+```text
 python import_sql.py
 ```
 
 访问地址：
-- 前台系统：http://yourhost/
-- 管理后台：http://yourhost/admin/
+
+- 前台系统：<http://yourhost/>
+- 管理后台：<http://yourhost/admin/>
 
 **默认账号（使用初始化脚本后）：**
+
 - 管理员：admin / admin123
 - 测试用户：test / test123
 
 ## 📁 项目结构
 
-```
+```text
 douyin-analysis/
 ├── dy_project/          # Django项目配置
 │   ├── settings.py      # 项目设置
@@ -81,10 +86,12 @@ douyin-analysis/
 ## 📖 使用说明
 
 ### 登录系统
+
 1. 访问首页会自动跳转到登录页面
 2. 使用注册的账号登录或创建新账号
 
 ### 数据分析功能
+
 - **首页：** 查看整体数据概览和统计图表
 - **视频排行榜：** 按点赞、评论、收藏、分享等维度查看视频排名
 - **AI分析建议：** 获取基于数据的智能分析建议
@@ -102,13 +109,10 @@ douyin-analysis/
 
 ## 📧 联系方式
 
-- 项目地址：https://github.com/your-username/douyin-analysis
-- 问题反馈：https://github.com/your-username/douyin-analysis/issues
+- 问题反馈：<926235281@qq.com>
 
 ---
 
 ## 支持作者
 
 ⭐ 如果这个项目对你有帮助，请给个Star支持一下！
-
-````
