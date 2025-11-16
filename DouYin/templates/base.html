@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>抖音数据分析系统</title>
+    <meta name="description" content="抖音数据分析平台">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="all,follow">
+    <!-- Bootstrap CSS-->
+    <link rel="stylesheet" href="/static/vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/vendor/font-awesome/css/font-awesome.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="shortcut icon" type="image/x-icon" href="/static/img/favicon.ico">
+    <link rel="stylesheet" href="/static/css/components.css">
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', 'Microsoft YaHei', sans-serif;
+            background: #f5f7fa;
+            color: #333;
+        }
+
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* 侧边栏样式 */
+        .sidebar {
+            width: 240px;
+            background: #fff;
+            box-shadow: 2px 0 8px rgba(0,0,0,0.05);
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 1000;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            padding: 24px 20px;
+            text-decoration: none;
+            color: #5470c6;
+            font-size: 18px;
+            font-weight: 600;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .logo:hover {
+            text-decoration: none;
+            color: #5470c6;
+        }
+
+        .logo-icon {
+            font-size: 24px;
+            margin-right: 12px;
+        }
+
+        .sidebar-menu {
+            padding: 20px 0;
+        }
+
+        .menu-title {
+            padding: 8px 20px;
+            font-size: 12px;
+            color: #999;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .menu-item {
+            margin: 4px 12px;
+        }
+
+        .menu-link {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            color: #666;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .menu-link:hover {
+            background: #f5f7fa;
+            color: #5470c6;
+            text-decoration: none;
+        }
+
+        .menu-link.active {
+            background: #e8f0ff;
+            color: #5470c6;
+            font-weight: 500;
+        }
+
+        .menu-link i {
+            margin-right: 12px;
+            font-size: 16px;
+            width: 20px;
+            text-align: center;
+        }
+
+        /* 主内容区域 */
+        .main-content {
+            margin-left: 240px;
+            flex: 1;
+            padding: 24px;
+            width: calc(100% - 240px);
+        }
+
+        /* 顶部用户信息 */
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            background: #fff;
+            padding: 8px 16px;
+            border-radius: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #5470c6;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 8px;
+        }
+    </style>
+    {% block extra_style %}{% endblock %}
+</head>
+<body>
+    <div class="app-container">
+        <!-- 侧边栏 -->
+        <aside class="sidebar">
+            <a href="/home/index/" class="logo">
+                <i class="fa fa-bar-chart logo-icon"></i>
+                <span>抖音数据分析</span>
+            </a>
+            <div class="sidebar-menu">
+                <div class="menu-title">数据总览</div>
+                <div class="menu-item">
+                    <a href="/home/index/" class="menu-link {% if request.resolver_match.url_name == 'index' %}active{% endif %}">
+                        <i class="fa fa-home"></i>
+                        <span>首页</span>
+                    </a>
+                </div>
+                <div class="menu-title">视频相关分析</div>
+                <div class="menu-item">
+                    <a href="/home/video-rank/" class="menu-link {% if request.resolver_match.url_name == 'video_rank' %}active{% endif %}">
+                        <i class="fa fa-video-camera"></i>
+                        <span>视频排行榜查询</span>
+                    </a>
+                </div>
+                <div class="menu-item">
+                    <a href="/home/ai-analysis/" class="menu-link {% if request.resolver_match.url_name == 'ai_analysis' %}active{% endif %}">
+                        <i class="fa fa-line-chart"></i>
+                        <span>视频信息AI分析建议</span>
+                    </a>
+                </div>
+                <div class="menu-title">数据相关可视化</div>
+                <div class="menu-item">
+                    <a href="/home/fans-analysis/" class="menu-link {% if request.resolver_match.url_name == 'fans_analysis' %}active{% endif %}">
+                        <i class="fa fa-pie-chart"></i>
+                        <span>用户粉丝分析</span>
+                    </a>
+                </div>
+                <div class="menu-item">
+                    <a href="/home/fans-distribution/" class="menu-link {% if request.resolver_match.url_name == 'fans_distribution' %}active{% endif %}">
+                        <i class="fa fa-bar-chart"></i>
+                        <span>粉丝数量分析</span>
+                    </a>
+                </div>
+                <div class="menu-item">
+                    <a href="/home/comment-share/" class="menu-link {% if request.resolver_match.url_name == 'comment_share' %}active{% endif %}">
+                        <i class="fa fa-comments"></i>
+                        <span>评论与分享</span>
+                    </a>
+                </div>
+                <div class="menu-item">
+                    <a href="/home/ip-analysis/" class="menu-link {% if request.resolver_match.url_name == 'ip_analysis' %}active{% endif %}">
+                        <i class="fa fa-map-marker"></i>
+                        <span>IP分析</span>
+                    </a>
+                </div>
+                <div class="menu-title">可视化</div>
+                <div class="menu-item">
+                    <a href="/home/video-wordcloud/" class="menu-link {% if request.resolver_match.url_name == 'video_wordcloud' %}active{% endif %}">
+                        <i class="fa fa-cloud"></i>
+                        <span>视频词云图</span>
+                    </a>
+                </div>
+                <div class="menu-item">
+                    <a href="/home/comment-wordcloud/" class="menu-link {% if request.resolver_match.url_name == 'comment_wordcloud' %}active{% endif %}">
+                        <i class="fa fa-cloud"></i>
+                        <span>评论词云图</span>
+                    </a>
+                </div>
+                <div class="menu-title">数据预测</div>
+                <div class="menu-item">
+                    <a href="/home/like-prediction/" class="menu-link {% if request.resolver_match.url_name == 'like_prediction' %}active{% endif %}">
+                        <i class="fa fa-line-chart"></i>
+                        <span>点赞量趋势预测</span>
+                    </a>
+                </div>
+                <div class="menu-title">其他管理</div>
+                <div class="menu-item">
+                    <a href="/home/data-management/" class="menu-link {% if request.resolver_match.url_name == 'data_management' %}active{% endif %}">
+                        <i class="fa fa-database"></i>
+                        <span>信息管理</span>
+                    </a>
+                </div>
+                <div class="menu-item">
+                    <a href="/home/logout/" class="menu-link" onclick="return confirm('确定要退出登录吗？');">
+                        <i class="fa fa-sign-out"></i>
+                        <span>退出登录</span>
+                    </a>
+                </div>
+            </div>
+        </aside>
+
+        <!-- 主内容区域 -->
+        <main class="main-content">
+            <div class="top-bar">
+                <div></div>
+                <div class="user-info">
+                    <div class="user-avatar">
+                        <i class="fa fa-user"></i>
+                    </div>
+                    <span>{{ request.session.username|default:"用户" }}</span>
+                </div>
+            </div>
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+
+    <script src="/static/vendor/jquery/jquery.min.js"></script>
+    <script src="/static/vendor/bootstrap/js/bootstrap.min.js"></script>
+    {% block extra_script %}{% endblock %}
+</body>
+</html>

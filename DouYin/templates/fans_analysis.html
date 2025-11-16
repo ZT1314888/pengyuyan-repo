@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="page-content">
+    {% include 'components/page_header.html' with icon='fa-pie-chart' title='用户粉丝分析' %}
+
+    <div class="stats-info">
+        {% include 'components/info_card.html' with icon='fa-users' label='总用户数' value=total_users %}
+        {% include 'components/info_card.html' with icon='fa-star' label='TOP10用户' value=chart_data|length %}
+        {% include 'components/info_card.html' with icon='fa-line-chart' label='分析维度' value='粉丝数' %}
+    </div>
+
+    {% include 'components/chart_container.html' with chart_id='fansChart' %}
+</div>
+{% endblock %}
+
+{% block extra_script %}
+{{ chart_data|json_script:"chart-data" }}
+<script>
+    var chartDom = document.getElementById('fansChart');
+    var myChart = echarts.init(chartDom);
+    var chartData = JSON.parse(document.getElementById('chart-data').textContent);
+    
+    var option = {
+        title: {
+            text: '粉丝数TOP10用户分布',
+            left: 'center',
+            top: 20,
+            textStyle: {
+                fontSize: 18,
+                fontWeight: 600
+            }
+        },
+        tooltip: {
+            trigger: 'item',
+            formatter: '{b}: {c} ({d}%)'
+        },
+        legend: {
+            orient: 'vertical',
+            left: 'left',
+            top: 'middle',
+            data: chartData.map(item => item.name)
+        },
+        series: [
+            {
+                name: '粉丝数',
+                type: 'pie',
+                radius: ['40%', '70%'],
+                center: ['60%', '50%'],
+                avoidLabelOverlap: false,
+                itemStyle: {
+                    borderRadius: 10,
+                    borderColor: '#fff',
+                    borderWidth: 2
+                },
+                label: {
+                    show: true,
+                    formatter: '{b}\n{d}%'
+                },
+                emphasis: {
+                    label: {
+                        show: true,
+                        fontSize: 16,
+                        fontWeight: 'bold'
+                    }
+                },
+                data: chartData
+            }
+        ]
+    };
+    
+    myChart.setOption(option);
+    
+    window.addEventListener('resize', function() {
+        myChart.resize();
+    });
+</script>
+{% endblock %}
